@@ -49,13 +49,11 @@ export class Select extends Component<ISelectProps>{
     const resolvedClassName = classnames(
       "yum-ui-form-select",
       "form-select",
-      { "has-icon-left": icon },
+      { "icon": icon },
       { "is-error": error },
       { disabled: disabled },
       className
     );
-
-
 
     return (
       <select

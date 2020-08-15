@@ -10,6 +10,7 @@ interface ICheckboxProps {
   label:string
   disabled:boolean
   className:string
+  labelClassName:string
   error:string
 }
 
@@ -30,23 +31,24 @@ export class Checkbox extends Component <ICheckboxProps>{
       label,
       disabled,
       className,
-      error
+      error,
+      labelClassName,
     } = this.props;
 
     const resolvedClassName = classnames(
       'yum-ui-form-checkbox',
       'form-checkbox',
-      { 'is-error': error },
+      { 'error': error },
       { 'disabled': disabled },
       className,
     );
 
+    const resolvedLabelClassName = classnames("form-label", "block", labelClassName);
+  
     return (
-      <label className={resolvedClassName}>
-        {/* IMPORTANT: Known issue with tslint, refer - https://github.com/microsoft/tslint-microsoft-contrib/issues/749 */}
-        {/* tslint:disable-next-line:react-a11y-input-elements */}
+      <>
         <input
-          placeholder=""
+          className={resolvedClassName}
           type="checkbox"
           role="checkbox"
           checked={value}
@@ -54,10 +56,12 @@ export class Checkbox extends Component <ICheckboxProps>{
           disabled={disabled}
           onChange={this.onChange}
         />
-        <i className="form-icon"></i>
-        {label && <span>{label}</span>}
-      </label>
+        {label && (
+          <label for="push_everything" className="ml-3">
+            <span className={resolvedLabelClassName}>{label}</span>
+          </label>
+        )}
+      </>
     );
   }
 }
-

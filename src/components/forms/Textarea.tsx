@@ -33,7 +33,6 @@ export class Textarea extends Component <ITextareaProps>{
 
     const resolvedClassName = classnames(
       'yum-ui-form-textarea',
-      'form-input',
       'form-textarea',
       { 'is-error': error },
       { 'disabled': disabled },

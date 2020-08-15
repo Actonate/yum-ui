@@ -11,9 +11,6 @@ interface IButtonProps {
     primary?:string,
     secondary?:string,
     disabled?:boolean,
-    size?:string,
-    success?:string
-    error?:string
 }
 
 export class Button extends Component <IButtonProps> {
@@ -38,40 +35,26 @@ export class Button extends Component <IButtonProps> {
   render() {
     const {
       className,
-      onClick,
       title,
       children,
-      primary,
-      secondary,
       disabled,
-      size,
-      success,
-      error
     } = this.props;
 
     const resolvedClassName = classnames(
-    "btn",
-    "yum-ui-button",
-    { "btn-primary": primary },
-    { "btn-secondary": secondary },
-    { "btn-disabled": disabled },
-    { "btn-success": success },
-    { "btn-error": error },
-    { "btn-lg": size === "lg" },
-    { "btn-sm": size === "sm" },
-    className
+      "btn yum-ui-button",
+      "hover:border-gray-400 font-semibold border border-gray-400 rounded shadow px-4 py-2",
+      className
     );
 
     return (
       <button
-      title={title || ""}
-      className={resolvedClassName}
-      onClick={this.onClickAction}
+        title={title || ""}
+        className={resolvedClassName}
+        onClick={this.onClickAction}
+        disabled={disabled}
       >
       {children}
       </button>
     );
  }
 }
-
-

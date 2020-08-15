@@ -11,12 +11,14 @@ interface ISwitchProps{
     disabled:boolean
     error:string
     className:string
+    activeClassName:string,
 }
 
 
 export class Switch extends Component <ISwitchProps> {
   static defaultProps = {
     onChange: () => { },
+    activeClassName: 'bg-blue-600'
   }
 
   onChange= (e) =>{
@@ -33,33 +35,37 @@ export class Switch extends Component <ISwitchProps> {
       disabled,
       error,
       className,
+      activeClassName,
     } = this.props;
 
     const resolvedClassName = classnames(
-      'yum-ui-form-switch',
-      'form-switch',
-      { 'is-error': error },
-      { 'disabled': disabled },
+      "yum-ui-form-switch",
+      "form-switch",
+      "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline",
+      { "error": error },
+      { disabled: disabled },
       size,
       className,
+      value ? 'active' : '',
+      value ? activeClassName : "bg-gray-200",
+    );
+
+    const toggleClassName = classnames(
+      {'translate-x-0': !value },
+      {'translate-x-5': value },
+      'inline-block h-5 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200'
     );
 
     return (
-      <label className={resolvedClassName}>
-        {/* IMPORTANT: Known issue with tslint, refer - https://github.com/microsoft/tslint-microsoft-contrib/issues/749 */}
-        {/* tslint:disable-next-line:react-a11y-input-elements */}
-        <input
-          placeholder={label}
+      <>
+        <span
           role="checkbox"
-          type="checkbox"
           aria-checked={value}
-          checked={value}
-          disabled={disabled}
-          onChange={this.onChange}
-        />
-        <i className="form-icon"></i>
-        {label && <span>{label}</span>}
-      </label>
+          className={resolvedClassName}
+        >
+          <span aria-hidden="true" className={toggleClassName}></span>
+        </span>
+      </>
     );
   }
 }

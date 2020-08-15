@@ -4,8 +4,7 @@ const sass = require('gulp-sass');
 const concat = require("gulp-concat");
 const ts = require('gulp-typescript');
 const del = require('del');
-
-const babelrc = require('./.babelrc');
+const watch = require('gulp-watch');
 
 sass.compiler = require('node-sass');
 
@@ -53,8 +52,14 @@ function copyCSS() {
 		.pipe(gulp.dest('css/'))
 }
 
+function watchCSS() {
+	// Endless stream mode
+	return watch('src/styles/**/*.scss', gulp.series(compileSCSS, copyCSS));
+}
+
 const compileCSS = gulp.series(compileSCSS, copyCSS);
 const compileTS = gulp.series(compileBabel);
 const generateTypes = gulp.series(buildTypes, concatTypes);
 
 exports.build = gulp.series(cleanDist, compileCSS, compileTS, generateTypes);
+exports.watchStyles = gulp.series(watchCSS);

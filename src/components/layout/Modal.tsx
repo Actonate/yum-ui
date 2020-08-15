@@ -8,12 +8,12 @@ import "../../../css/Modal.css";
 interface IModalContainerProps{
     open:boolean
     onClose:any
-    title:string
-    size:string
     children:any
     className:string
     onClick:Function
     renderToElement:any
+    containerClassName:string
+    overlayClassName:string
 }
 
 export class Modal extends Component <IModalContainerProps>{
@@ -21,40 +21,49 @@ export class Modal extends Component <IModalContainerProps>{
     const {
       open,
       onClose,
-      title,
-      size,
       children,
-      className
+      className,
+      containerClassName,
+      overlayClassName,
     } = this.props;
+
+    if (!open) {
+      return null;
+    }
 
     const resolvedClassName = classnames(
       "yum-ui-modal",
       "modal",
-      { "modal-sm": size === "sm" },
-      { "modal-lg": size === "lg" },
-      { active: open },
+      "shadow-xl overflow-hidden transform transition-all ",
+      { "ease-in duration-300 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95": !open },
+      { "ease-out duration-300 opacity-100 translate-y-0 sm:scale-100": open },
       className
     );
 
+    const resolvedContainerClassName = classnames(
+      "fixed bottom-0 inset-x-0 px-4 pb-6 sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center",
+      { "ease-out duration-300 opacity-0": open },
+      { "ease-out duration-300 opacity-100": open },
+      containerClassName,
+    );
+
+    const resolvedOverlayClassName = classnames(
+      "absolute inset-0 bg-gray-800 opacity-75",
+      overlayClassName
+    );
+
     return (
-      <div className={resolvedClassName}>
-        <div className="modal-overlay" />
-        <div className="modal-container">
-          <div className="modal-header">
-            <div>
-              <div>
-                <h4>{title}</h4>
-              </div>
-              <button
-                onClick={onClose}
-                aria-label="Close"
-                className="btn-close"
-              >
-                <Icon icon="Cancel" fontSize={12} />
-              </button>
-            </div>
-          </div>
-          <div className="modal-body">{children}</div>
+      <div className={resolvedContainerClassName}>
+        <div role="button" className="fixed inset-0 transition-opacity" onClick={onClose}>
+          <div className={resolvedOverlayClassName}></div>
+        </div>
+        <div
+          className={resolvedClassName}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-headline"
+        >
+          <div>{children}</div>
         </div>
       </div>
     );
@@ -64,8 +73,7 @@ export class Modal extends Component <IModalContainerProps>{
     let { renderToElement } = this.props;
 
     if (!renderToElement) {
-      renderToElement = document.querySelector("#modal-root") ||
-      document.querySelector("body");
+      renderToElement = document.querySelector("body");
     }
 
     const renderedModal = this.renderModal();

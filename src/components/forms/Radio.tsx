@@ -11,8 +11,8 @@ interface IRadioProps{
     error:string
     onChange:Function
     className:string
+    labelClassName:string
 }
-
 
 export class Radio extends Component <IRadioProps>{
 
@@ -30,6 +30,7 @@ export class Radio extends Component <IRadioProps>{
       error,
       onChange,
       className,
+      labelClassName,
     } = this.props;
 
     const resolvedClassName = classnames(
@@ -40,24 +41,31 @@ export class Radio extends Component <IRadioProps>{
       className,
     );
 
+    const resolvedLabelClassName = classnames(
+      'form-label',
+      'block',
+      labelClassName
+    );
+
     return (
-      <label className={resolvedClassName}>
-        {/* IMPORTANT: Known issue with tslint, refer - https://github.com/microsoft/tslint-microsoft-contrib/issues/749 */}
-        {/* tslint:disable-next-line:react-a11y-input-elements */}
+      <>
         <input
           placeholder={label}
           role="radio"
           name={name}
+          className={resolvedClassName}
           type="radio"
           disabled={disabled}
           checked={value}
           aria-checked={value}
           onChange={this.onChange}
         />
-        <i className="form-icon"></i>
-        {label && <span>{label}</span>}
-      </label>
+        {label && (
+          <label for="push_everything" className="ml-3">
+            <span className={resolvedLabelClassName}>{label}</span>
+          </label>
+        )}
+      </>
     );
   }
 }
-

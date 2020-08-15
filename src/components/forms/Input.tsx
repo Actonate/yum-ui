@@ -4,7 +4,6 @@ import classnames from "classnames";
 import "../../../css/Input.css";
 
 interface InputProps {
-    icon?: string;
     value?: string;
     disabled?: boolean;
     autoFocus?: boolean;
@@ -16,6 +15,7 @@ interface InputProps {
     max?: number;
     maxLength?: number;
     onChange?: Function;
+    onBlur?: Function;
 }
 
 export class Input extends Component<InputProps> {
@@ -30,33 +30,32 @@ export class Input extends Component<InputProps> {
 
     onEventChange = (e) =>{
         const { props } = this;
-        const { type } = props;
+        const { type, onChange } = props;
 
         if (type == "number") {
-            props["onChange"](e.target.value ? parseFloat(e.target.value) : "");
+            onChange(e.target.value ? parseFloat(e.target.value) : "");
             return;
         }
 
-        props["onChange"](e.target.value);
+        onChange(e.target.value);
         return;
     }
 
     onEventBlur = (e) => {
         const { props } = this;
-        const { type } = props;
+        const { type, onBlur } = props;
 
         if (type == "number") {
-            props["onBlur"](e.target.value ? parseFloat(e.target.value) : "");
+            onBlur(e.target.value ? parseFloat(e.target.value) : "");
             return;
         }
 
-        props["onBlur"](e.target.value);
+        onBlur(e.target.value);
         return;
     }
 
     render() {
         const {
-            icon,
             value,
             disabled,
             type,
@@ -70,10 +69,8 @@ export class Input extends Component<InputProps> {
         } = this.props;
 
         const resolvedClassName = classnames(
-            "yum-ui-form-input",
-            "form-input",
-            { "has-icon-left": icon },
-            { "is-error": error },
+            "form-input yum-ui-form-input",
+            { "error": error },
             { disabled: disabled },
             className
         );
